@@ -42,3 +42,9 @@ VALUES (
 SELECT * FROM recipe;
 
 SELECT * FROM recipe WHERE category='appetizer';
+
+UPDATE recipe SET category='main course' WHERE title='babi panggang';
+
+DELETE FROM recipe WHERE id=2;
+
+DELETE FROM recipe WHERE id=3;
