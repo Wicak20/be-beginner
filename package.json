@@ -1,5 +1,28 @@
 {
   "dependencies": {
-    "express": "^4.18.2"
-  }
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.11.1"
+  },
+  "name": "recipe",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eanp/13recipe.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eanp/13recipe/issues"
+  },
+  "homepage": "https://github.com/eanp/13recipe#readme",
+  "description": ""
 }

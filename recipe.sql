@@ -21,7 +21,7 @@ INSERT INTO
 VALUES (
         'telur gulung',
         'telur, msg, bihun, saus',
-        'appetizer',
+        '3',
         'https://placehold.co/600x400'
     );
 
