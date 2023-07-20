@@ -2,7 +2,7 @@ const Pool = require('../config/db')
 
 const getRecipeAll = async () => {
     return new Promise((resolve, reject) =>
-        Pool.query(`SELECT recipe.id, recipe.title, recipe.ingredients, recipe.photo, recipe.category_id FROM recipe`, (err, result) => {
+        Pool.query(`SELECT recipe.id, recipe.title, recipe.ingredients, recipe.photo, category.category_name AS category FROM recipe JOIN category ON recipe.category_id = category.category_id`, (err, result) => {
             if (!err) {
                 resolve(result)
             } else {
@@ -14,7 +14,7 @@ const getRecipeAll = async () => {
 
 const getRecipeById = async (id) => {
     return new Promise((resolve, reject) =>
-        Pool.query(`SELECT * FROM recipe WHERE id=${id}`, (err, result) => {
+        Pool.query(`SELECT recipe.id, recipe.title, recipe.ingredients, recipe.photo, category.category_name AS category FROM recipe JOIN category ON recipe.category_id = category.category_id WHERE id=${id} `, (err, result) => {
             if (!err) {
                 resolve(result)
             } else {

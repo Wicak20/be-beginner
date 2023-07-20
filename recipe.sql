@@ -7,14 +7,22 @@ CREATE TABLE
         id SERIAL,
         title VARCHAR NOT NULL,
         ingredients TEXT NOT NULL,
-        category_id VARCHAR NOT NULL,
+        category_id INTEGER NOT NULL,
         photo VARCHAR NOT NULL
     );
 
 CREATE TABLE
     category(
-        id SERIAL PRIMARY KEY,
-        name VARCHAR NOT NULL
+        category_id SERIAL PRIMARY KEY,
+        category_name VARCHAR NOT NULL
+    );
+
+CREATE TABLE
+    users(
+        id SERIAL,
+        name VARCHAR NOT NULL,
+        email VARCHAR NOT NULL,
+        password VARCHAR NOT NULL
     );
 
 -- Insert Data--
@@ -33,11 +41,51 @@ VALUES (
         'https://placehold.co/600x400'
     );
 
-INSERT INTO category(name) VALUES('main course');
+INSERT INTO category(category_name) VALUES('main course');
 
-INSERT INTO category(name) VALUES('desert');
+INSERT INTO category(category_name) VALUES('desert');
 
-INSERT INTO category(name) VALUES('appetizer');
+INSERT INTO category(category_name) VALUES('appetizer');
+
+INSERT INTO
+    users(name, email, password)
+VALUES (
+        'Rudi Hartono',
+        'rudihrtn@gmail.com',
+        'akusygkmu12'
+    );
+
+INSERT INTO
+    users(name, email, password)
+VALUES (
+        'Dimas Galih',
+        'dmsglih@gmail.com',
+        'akusygaku123'
+    );
+
+INSERT INTO
+    users(name, email, password)
+VALUES (
+        'Sebastian Nurah',
+        'sbstinnrh@gmail.com',
+        'qwerty123'
+    );
+
+INSERT INTO
+    users(name, email, password)
+VALUES (
+        'Nilam Susi',
+        'nilamsusi@gmail.com',
+        'akuygtrskiti22'
+    );
+
+INSERT INTO
+    users(name, email, password)
+VALUES (
+        'Puspa Jingga',
+        'pspajngga@gmail.com',
+        'ytrewq321'
+    );
 
 SELECT * FROM recipe;
 
