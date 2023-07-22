@@ -12,9 +12,33 @@ const getUsersAll = async () => {
     )
 }
 
+const getLogin = async (email) => {
+    return new Promise((resolve, reject) =>
+        Pool.query(`SELECT * FROM users WHERE email = '${email}' `, (err, result) => {
+            if (!err) {
+                resolve(result)
+            } else {
+                reject(err)
+            }
+        })
+    )
+}
+
 const getUsersById = async (id) => {
     return new Promise((resolve, reject) =>
         Pool.query(`SELECT * FROM users WHERE id=${id}`, (err, result) => {
+            if (!err) {
+                resolve(result)
+            } else {
+                reject(err)
+            }
+        })
+    )
+}
+
+const getUsersByEmail = async (email) => {
+    return new Promise((resolve, reject) =>
+        Pool.query(`SELECT * FROM users WHERE email='${email}'`, (err, result) => {
             if (!err) {
                 resolve(result)
             } else {
@@ -40,9 +64,9 @@ const postUsers = async (data) => {
 }
 
 const putUsers = async (data, id) => {
-    const { email, password } = data
+    const { name, email, password } = data
     return new Promise((resolve, reject) =>
-        Pool.query(`UPDATE users SET email='${email}',password='${password}' WHERE id=${id}`, (err, result) => {
+        Pool.query(`UPDATE users SET name='${name}',email='${email}',password='${password}' WHERE id=${id}`, (err, result) => {
             if (!err) {
                 resolve(result)
             } else {
@@ -67,4 +91,4 @@ const deleteById = async (id) => {
 
 
 
-module.exports = { getUsersAll, getUsersById, postUsers, putUsers, deleteById }
+module.exports = { getUsersAll, getLogin, getUsersById, getUsersByEmail, postUsers, putUsers, deleteById }
