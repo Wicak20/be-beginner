@@ -1,12 +1,13 @@
 const { getData, getDataById, postData, putData, deleteDataById } = require("../controller/RecipeController.js")
+const { authenticateUser } = require('../middleware/auth.js')
 const express = require('express')
 const router = express.Router()
 
-router.get('/', getData)
-router.get('/:id', getDataById)
-router.post('/', postData)
-router.put('/:id', putData)
-router.delete('/:id', deleteDataById)
+router.get('/', authenticateUser, getData)
+router.get('/:id', authenticateUser, getDataById)
+router.post('/', authenticateUser, postData)
+router.put('/:id', authenticateUser, putData)
+router.delete('/:id', authenticateUser, deleteDataById)
 
 
 module.exports = router;

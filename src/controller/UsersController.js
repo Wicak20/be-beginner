@@ -1,5 +1,7 @@
 const { getUsersAll, getLogin, getUsersById, getUsersByEmail, postUsers, putUsers, deleteById } = require("../model/UsersModel")
 const argon2 = require('argon2');
+const { createToken } = require("../utils/jwt");
+
 
 const UsersController = {
     getData: async (req, res, next) => {
@@ -21,7 +23,8 @@ const UsersController = {
             if (login.rowCount) {
                 const passwordUser = login.rows[0].password
                 if (await argon2.verify(passwordUser, password)) {
-                    return res.status(200).json({ "status": 200, "message": "Login Success!" })
+                    const token = createToken({ email: email, id: login.rows[0].id });
+                    return res.status(200).json({ "status": 200, "message": "Login Success!", token })
                 } else {
                     return res.status(404).json({ "status": 404, "message": "wrong password !!!" })
                 }
