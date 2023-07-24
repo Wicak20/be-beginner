@@ -1,10 +1,27 @@
-const { getRecipeAll, getRecipeById, postRecipe, putRecipe, deleteById } = require('../model/RecipeModel')
+const { getRecipeAll, getRecipeAllCount, getRecipeById, postRecipe, putRecipe, deleteById } = require('../model/RecipeModel')
 
 const RecipeController = {
     getData: async (req, res, next) => {
         try {
-            let dataRecipe = await getRecipeAll()
-            res.status(200).json({ "status": 200, "message": "get data recipe success", data: dataRecipe.rows })
+            let { sortBy, sort, page, limit } = req.query
+
+            let currentPage = page || 1;
+            let pageLimit = limit || 5;
+            const parameter = {
+                sortBy: sortBy || 'created_at',
+                sort: sort || 'ASC',
+                offset: (currentPage - 1) * pageLimit,
+                limit: pageLimit
+            };
+            let dataRecipe = await getRecipeAll(parameter)
+            let dataRecipeCount = await getRecipeAllCount(parameter)
+
+            let pagination = {
+                totalPage: Math.ceil(dataRecipeCount.rowCount / pageLimit),
+                totalData: parseInt(dataRecipeCount.rowCount),
+                pageNow: parseInt(currentPage)
+            };
+            res.status(200).json({ "status": 200, "message": "get data recipe success", data: dataRecipe.rows, pagination })
 
         } catch (err) {
             return res.status(404).json({ "status": 404, "message": err.message })

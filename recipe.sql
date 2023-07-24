@@ -96,3 +96,5 @@ UPDATE recipe SET category='main course' WHERE title='babi panggang';
 DELETE FROM recipe WHERE id=2;
 
 DELETE FROM recipe WHERE id=3;
+
+ALTER TABLE recipe ADD COLUMN created_At DATE NOT NULL;
