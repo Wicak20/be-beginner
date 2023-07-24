@@ -7,8 +7,8 @@ const authenticateUser = (req, res, next) => {
     const accessToken = authHeader.split(" ")[1];
     try {
         if (accessToken) {
-            const payload = tokenValidation(accessToken);
-            req.user = payload;
+            const currentUser = tokenValidation(accessToken);
+            req.user = currentUser;
             return next();
         }
         next();

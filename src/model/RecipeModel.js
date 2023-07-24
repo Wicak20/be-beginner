@@ -1,8 +1,8 @@
 const Pool = require('../config/db')
 
-const getRecipeAll = async ({ sortBy, sort, offset, limit }) => {
+const getRecipeAll = async ({ searchRecipe, searchBy, sortBy, sort, offset, limit }) => {
     return new Promise((resolve, reject) =>
-        Pool.query(`SELECT recipe.id, recipe.title, recipe.ingredients, recipe.photo, category.category_name AS category FROM recipe JOIN category ON recipe.category_id = category.category_id ORDER BY ${sortBy} ${sort} OFFSET ${offset} LIMIT ${limit}`, (err, result) => {
+        Pool.query(`SELECT recipe.id, recipe.title, recipe.ingredients, recipe.photo, category.category_name AS category FROM recipe JOIN category ON recipe.category_id = category.category_id  WHERE ${searchBy} ILIKE '%${searchRecipe}%' ORDER BY ${sortBy} ${sort} OFFSET ${offset} LIMIT ${limit}`, (err, result) => {
             if (!err) {
                 resolve(result)
             } else {
@@ -26,7 +26,7 @@ const getRecipeAllCount = async () => {
 
 const getRecipeById = async (id) => {
     return new Promise((resolve, reject) =>
-        Pool.query(`SELECT recipe.id, recipe.title, recipe.ingredients, recipe.photo, category.category_name AS category FROM recipe JOIN category ON recipe.category_id = category.category_id WHERE id=${id} `, (err, result) => {
+        Pool.query(`SELECT recipe.id, recipe.title, recipe.ingredients, recipe.photo, recipe.user_id, recipe.category_id, category.category_name AS category FROM recipe JOIN category ON recipe.category_id = category.category_id WHERE id=${id} `, (err, result) => {
             if (!err) {
                 resolve(result)
             } else {
@@ -37,11 +37,11 @@ const getRecipeById = async (id) => {
 }
 
 const postRecipe = async (data) => {
-    const { title, ingredients, category_id } = data
+    const { title, ingredients, category_id, user_id } = data
     console.log(data)
     console.log("model postRecipe")
     return new Promise((resolve, reject) =>
-        Pool.query(`INSERT INTO recipe(title,ingredients,category_id,photo, created_at) VALUES('${title}','${ingredients}','${category_id}', 'https://placehold.co/600x400', CURRENT_TIMESTAMP )`, (err, result) => {
+        Pool.query(`INSERT INTO recipe(title,ingredients,category_id,photo,user_id, created_at) VALUES('${title}','${ingredients}','${category_id}', 'https://placehold.co/600x400', '${user_id}', CURRENT_TIMESTAMP )`, (err, result) => {
             if (!err) {
                 resolve(result)
             } else {
@@ -54,7 +54,7 @@ const postRecipe = async (data) => {
 const putRecipe = async (data, id) => {
     const { title, ingredients, category_id } = data
     return new Promise((resolve, reject) =>
-        Pool.query(`UPDATE recipe SET title='${title}', ingredients='${ingredients}', category_id = ${category_id} WHERE id=${id}`, (err, result) => {
+        Pool.query(`UPDATE recipe SET title='${title}', ingredients='${ingredients}', category_id = '${category_id}' WHERE id=${id}`, (err, result) => {
             if (!err) {
                 resolve(result)
             } else {
