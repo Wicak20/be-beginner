@@ -1,5 +1,6 @@
 const { getRecipeAll, getRecipeAllCount, getRecipeById, postRecipe, putRecipe, deleteById } = require('../model/RecipeModel');
 const { search, use } = require('../router/Recipe');
+const cloudinary = require("cloudinary").v2
 
 const RecipeController = {
     getData: async (req, res, next) => {
@@ -52,21 +53,28 @@ const RecipeController = {
     },
 
     postData: async (req, res, next) => {
+        const { title, ingredients, category_id } = req.body
+        const image = req.file
+        console.log(req.file);
 
         try {
-            const { title, ingredients, category_id } = req.body
+
             const current_user_id = req.user.id
-            console.log("post data")
-            console.log(title, ingredients, category_id)
 
             if (!title || !ingredients) {
                 return res.status(404).json({ "message": "input title ingredients  required" });
             }
+            const hasil = await cloudinary.uploader.upload(image.path, {
+                use_filename: true,
+                folder: "file-upload",
+            });
+
             let data = {
                 title: title,
                 ingredients: ingredients,
                 category_id: category_id,
-                user_id: current_user_id
+                user_id: current_user_id,
+                image: hasil.secure_url,
             }
 
             console.log("data")

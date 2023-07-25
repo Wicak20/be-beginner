@@ -37,11 +37,9 @@ const getRecipeById = async (id) => {
 }
 
 const postRecipe = async (data) => {
-    const { title, ingredients, category_id, user_id } = data
-    console.log(data)
-    console.log("model postRecipe")
+    const { title, ingredients, category_id, user_id, image } = data
     return new Promise((resolve, reject) =>
-        Pool.query(`INSERT INTO recipe(title,ingredients,category_id,photo,user_id, created_at) VALUES('${title}','${ingredients}','${category_id}', 'https://placehold.co/600x400', '${user_id}', CURRENT_TIMESTAMP )`, (err, result) => {
+        Pool.query(`INSERT INTO recipe(title,ingredients,category_id,photo,user_id, created_at) VALUES('${title}','${ingredients}','${category_id}', '${image}', '${user_id}', CURRENT_TIMESTAMP )`, (err, result) => {
             if (!err) {
                 resolve(result)
             } else {

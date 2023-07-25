@@ -1,5 +1,13 @@
-const express = require("express");
 require("dotenv").config();
+const cloudinary = require("cloudinary").v2
+cloudinary.config({
+    cloud_name: process.env.CLOUDE_NAME,
+    api_key: process.env.CLOUDE_API_KEY,
+    api_secret: process.env.CLOUDE_API_SECRET
+});
+
+const express = require("express");
+
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const cors = require("cors");
