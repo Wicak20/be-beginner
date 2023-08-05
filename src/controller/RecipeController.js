@@ -1,4 +1,4 @@
-const { getRecipeAll, getRecipeAllCount, getRecipeById, postRecipe, putRecipe, deleteById } = require('../model/RecipeModel');
+const { getRecipeAll, getRecipeAllCount, getRecipeAllByUserId, getRecipeAllByUserIdCount, getRecipeById, postRecipe, putRecipe, deleteById } = require('../model/RecipeModel');
 const { search, use } = require('../router/Recipe');
 const cloudinary = require("cloudinary").v2
 
@@ -19,6 +19,33 @@ const RecipeController = {
             };
             let dataRecipe = await getRecipeAll(parameter)
             let dataRecipeCount = await getRecipeAllCount(parameter)
+
+            let pagination = {
+                totalPage: Math.ceil(dataRecipeCount.rowCount / pageLimit),
+                totalData: parseInt(dataRecipeCount.rowCount),
+                pageNow: parseInt(currentPage)
+            };
+            res.status(200).json({ "status": 200, "message": "get data recipe success", data: dataRecipe.rows, pagination })
+
+        } catch (err) {
+            return res.status(404).json({ "status": 404, "message": err.message })
+        }
+    },
+
+    getDataByUserId: async (req, res, next) => {
+        try {
+            let { page, limit } = req.query
+            const userid = req.user.id
+
+            let currentPage = page || 1;
+            let pageLimit = limit || 5;
+            const parameter = {
+                userid: userid,
+                offset: (currentPage - 1) * pageLimit,
+                limit: pageLimit
+            };
+            let dataRecipe = await getRecipeAllByUserId(parameter)
+            let dataRecipeCount = await getRecipeAllByUserIdCount(parameter)
 
             let pagination = {
                 totalPage: Math.ceil(dataRecipeCount.rowCount / pageLimit),
@@ -54,6 +81,7 @@ const RecipeController = {
 
     postData: async (req, res, next) => {
         const { title, ingredients, category_id } = req.body
+        const current_user_id = req.user.id
         const image = req.file
         console.log(req.file);
 
@@ -75,6 +103,7 @@ const RecipeController = {
                 category_id: category_id,
                 user_id: current_user_id,
                 image: hasil.secure_url,
+                user_id: current_user_id
             }
 
             console.log("data")
