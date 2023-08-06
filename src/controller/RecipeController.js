@@ -103,6 +103,7 @@ const RecipeController = {
                 category_id: category_id,
                 user_id: current_user_id,
                 image: hasil.secure_url,
+                image_id: hasil.public_id,
                 user_id: current_user_id
             }
 
@@ -118,6 +119,7 @@ const RecipeController = {
     },
 
     putData: async (req, res, next) => {
+        const image = req.file
         try {
             const { id } = req.params
             const { title, ingredients, category_id } = req.body
@@ -135,10 +137,20 @@ const RecipeController = {
                 return res.status(404).json({ "message": "recipe bukan milik anda" });
             }
 
+            const hasilImage = image ? await cloudinary.uploader.upload(image.path, {
+                use_filename: true,
+                folder: "file-upload",
+            }) : { secure_url: '', public_id: '' };
+            if (image) {
+                await cloudinary.uploader.destroy(dataRecipeId.rows[0].image_id)
+            }
+
             let data = {
                 title: title || dataRecipeId.rows[0].title,
                 ingredients: ingredients || dataRecipeId.rows[0].ingredients,
                 category_id: parseInt(category_id) || dataRecipeId.rows[0].category_id,
+                photo: hasilImage.secure_url || dataRecipeId.rows[0].photo,
+                image_id: hasilImage.public_id || dataRecipeId.rows[0].image_id
             }
             let result = await putRecipe(data, id)
 
@@ -167,10 +179,14 @@ const RecipeController = {
                 return res.status(404).json({ "message": "id wrong" });
             }
 
+            dataRecipeId.rows[0].image_id
+
             let result = await deleteById(parseInt(id))
             console.log(result)
             if (result.rowCount == 0) {
                 throw new Error("delete data failed")
+            } else {
+                await cloudinary.uploader.destroy(dataRecipeId.rows[0].image_id)
             }
             return res.status(200).json({ "status": 200, "message": "delete data recipe success", data: result.rows[0] })
 

@@ -50,7 +50,7 @@ const getRecipeAllByUserIdCount = async ({ userid }) => {
 
 const getRecipeById = async (id) => {
     return new Promise((resolve, reject) =>
-        Pool.query(`SELECT recipe.id, recipe.title, recipe.ingredients, recipe.photo, recipe.user_id, recipe.category_id, category.category_name AS category FROM recipe JOIN category ON recipe.category_id = category.category_id WHERE id=${id} `, (err, result) => {
+        Pool.query(`SELECT recipe.id, recipe.title, recipe.ingredients, recipe.photo, recipe.image_id, recipe.user_id, recipe.category_id, category.category_name AS category FROM recipe JOIN category ON recipe.category_id = category.category_id WHERE id=${id} `, (err, result) => {
             if (!err) {
                 resolve(result)
             } else {
@@ -61,9 +61,9 @@ const getRecipeById = async (id) => {
 }
 
 const postRecipe = async (data) => {
-    const { title, ingredients, category_id, user_id, image } = data
+    const { title, ingredients, category_id, user_id, image, image_id } = data
     return new Promise((resolve, reject) =>
-        Pool.query(`INSERT INTO recipe(title,ingredients,category_id,photo,user_id, created_at) VALUES('${title}','${ingredients}','${category_id}', '${image}', '${user_id}', CURRENT_TIMESTAMP )`, (err, result) => {
+        Pool.query(`INSERT INTO recipe(title,ingredients,category_id,photo,image_id,user_id, created_at) VALUES('${title}','${ingredients}','${category_id}', '${image}','${image_id}', '${user_id}', CURRENT_TIMESTAMP )`, (err, result) => {
             if (!err) {
                 resolve(result)
             } else {
@@ -74,9 +74,9 @@ const postRecipe = async (data) => {
 }
 
 const putRecipe = async (data, id) => {
-    const { title, ingredients, category_id } = data
+    const { title, ingredients, category_id, photo, image_id } = data
     return new Promise((resolve, reject) =>
-        Pool.query(`UPDATE recipe SET title='${title}', ingredients='${ingredients}', category_id = '${category_id}' WHERE id=${id}`, (err, result) => {
+        Pool.query(`UPDATE recipe SET title='${title}', ingredients='${ingredients}', photo = '${photo}' , image_id = '${image_id}', category_id = '${category_id}' WHERE id=${id}`, (err, result) => {
             if (!err) {
                 resolve(result)
             } else {

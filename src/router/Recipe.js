@@ -8,7 +8,7 @@ router.get('/', authenticateUser, getData)
 router.get('/byuserid', authenticateUser, getDataByUserId)
 router.get('/:id', authenticateUser, getDataById)
 router.post('/', authenticateUser, multerUpload, postData)
-router.put('/:id', authenticateUser, putData)
+router.put('/:id', authenticateUser, multerUpload, putData)
 router.delete('/:id', authenticateUser, deleteDataById)
 
 
