@@ -127,7 +127,8 @@ const RecipeController = {
             if (!id || id <= 0 || isNaN(id)) {
                 return res.status(404).json({ "message": "id wrong" });
             }
-
+            console.log(image);
+            console.log('tes');
             let dataRecipeId = await getRecipeById(parseInt(id))
             if (dataRecipeId.rowCount === 0) {
                 return res.status(404).json({ "status": 404, "message": "The data you tried to update is not found in the database" });
