@@ -64,9 +64,9 @@ const postUsers = async (data) => {
 }
 
 const putUsers = async (data, id) => {
-    const { name, email, password } = data
+    const { name, email, password, image, image_id } = data
     return new Promise((resolve, reject) =>
-        Pool.query(`UPDATE users SET name='${name}',email='${email}',password='${password}' WHERE id=${id}`, (err, result) => {
+        Pool.query(`UPDATE users SET name='${name}',email='${email}',image='${image}',image_id='${image_id}',password='${password}' WHERE id=${id}`, (err, result) => {
             if (!err) {
                 resolve(result)
             } else {

@@ -1,6 +1,7 @@
 const { getUsersAll, getLogin, getUsersById, getUsersByEmail, postUsers, putUsers, deleteById } = require("../model/UsersModel")
 const argon2 = require('argon2');
 const { createToken } = require("../utils/jwt");
+const cloudinary = require("cloudinary").v2
 
 
 const UsersController = {
@@ -24,7 +25,7 @@ const UsersController = {
                 const passwordUser = login.rows[0].password
                 if (await argon2.verify(passwordUser, password)) {
                     const token = createToken({ email: email, id: login.rows[0].id });
-                    return res.status(200).json({ "status": 200, "message": "Login Success!", token })
+                    return res.status(200).json({ "status": 200, "message": "Login Success!", token, data: login.rows[0] })
                 } else {
                     return res.status(404).json({ "status": 404, "message": "wrong password !!!" })
                 }
@@ -85,8 +86,9 @@ const UsersController = {
     },
 
     putData: async (req, res, next) => {
+        const image = req.file
         try {
-            const { id } = req.params
+            const id = req.user.id
             const { name, email, password } = req.body
 
             if (!id || id <= 0 || isNaN(id)) {
@@ -100,10 +102,20 @@ const UsersController = {
 
             const passwordHashed = password ? await argon2.hash(password) : password
 
+            const hasilImage = image ? await cloudinary.uploader.upload(image.path, {
+                use_filename: true,
+                folder: "file-upload",
+            }) : { secure_url: '', public_id: '' };
+            if (image && dataUsersId.rows[0].image_id) {
+                await cloudinary.uploader.destroy(dataUsersId.rows[0].image_id)
+            }
+
             let data = {
                 name: name || dataUsersId.rows[0].name,
                 email: email || dataUsersId.rows[0].email,
-                password: passwordHashed || dataUsersId.rows[0].password
+                password: passwordHashed || dataUsersId.rows[0].password,
+                image: hasilImage.secure_url || dataUsersId.rows[0].image,
+                image_id: hasilImage.public_id || dataUsersId.rows[0].image_id
             }
 
             let result = await putUsers(data, id)
