@@ -1,4 +1,4 @@
--- Active: 1690267546582@@147.139.210.135@5432@wicak01@public
+-- Active: 1693236730455@@147.139.210.135@5432@wicak01
 
 CREATE TABLE
     recipe(
@@ -8,7 +8,8 @@ CREATE TABLE
         category_id INTEGER NOT NULL,
         photo VARCHAR NOT NULL,
         created_at TIMESTAMP NOT NULL,
-        user_id INT
+        user_id INT,
+        image_id VARCHAR
     );
 
 CREATE TABLE
@@ -22,7 +23,10 @@ CREATE TABLE
         id SERIAL,
         name VARCHAR NOT NULL,
         email VARCHAR NOT NULL,
-        password VARCHAR NOT NULL
+        password VARCHAR NOT NULL,
+        roles VARCHAR,
+        image VARCHAR(255),
+        image_id VARCHAR(255)
     );
 
 -- insert DATABASE

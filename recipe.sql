@@ -1,4 +1,4 @@
--- Active: 1689605987242@@127.0.0.1@5432@postgres@public
+-- Active: 1693236730455@@147.139.210.135@5432@wicak01
 
 -- create table
 
